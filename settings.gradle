@@ -1,0 +1,2 @@
+rootProject.name='SikFan Final Project'
+include ':app'
