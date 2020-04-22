@@ -6,8 +6,8 @@
 
     <ImageView
         android:id="@+id/imageView_recipeItem_image"
-        android:layout_width="174"
-        android:layout_height="174"
+        android:layout_width="174dp"
+        android:layout_height="174dp"
         android:layout_marginStart="6dp"
         android:layout_marginTop="6dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -15,7 +15,7 @@
         app:srcCompat="@android:mipmap/sym_def_app_icon" />
 
     <TextView
-        android:id="@+id/textView_recipeDetail_name"
+        android:id="@+id/textView_recipeItem_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
