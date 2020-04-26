@@ -2,15 +2,15 @@ package com.example.sikfanfinalproject;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sikfanfinalproject.ui.home.HomeFragment;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
@@ -19,7 +19,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
-public class RecipeListActivity extends AppCompatActivity implements RecipeAdapter.ItemClickListener {
+public class RecipeListFragment extends Fragment implements RecipeAdapter.ItemClickListener {
 
     private RecyclerView recyclerView;
     private RecipeAdapter recipeAdapter;
@@ -27,19 +27,11 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeAdapt
 
     public static final String EXTRA_RECIPE = "recipe";
 
-    public static final String TAG = RecipeListActivity.class.getSimpleName();
+    public static final String TAG = RecipeListFragment.class.getSimpleName();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_home);
-
-        wireWidgets();
-        setListeners();
-
-//        HomeFragment homeFragment = new HomeFragment();
-//        FragmentManager manager = getSupportFragmentManager();
-//        manager.beginTransaction().replace(R.id.navigation_home, homeFragment);
 
         InputStream XmlFileInputStream = getResources().openRawResource(R.raw.recipes); // getting XML
         String jsonString = readTextFile(XmlFileInputStream);
@@ -53,18 +45,17 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeAdapt
 
         recyclerView.setHasFixedSize(true);
         int numberOfColumns = 2;
-        recyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
-        recipeAdapter = new RecipeAdapter(this, recipeList);
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), numberOfColumns));
+        recipeAdapter = new RecipeAdapter(getActivity(), recipeList);
         recipeAdapter.setClickListener(this);
         recyclerView.setAdapter(recipeAdapter);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
-        HomeFragment fragment = new HomeFragment();
-        fragmentTransaction.add(R.id.nav_host_fragment, fragment);
-        fragmentTransaction.commit();
+        wireWidgets(rootView);
+        setListeners();
 
+        return rootView;
     }
 
     @Override
@@ -72,8 +63,8 @@ public class RecipeListActivity extends AppCompatActivity implements RecipeAdapt
         Log.i("TAG", "You clicked number " + recipeAdapter.getItem(position) + ", which is a cell position " + position);
     }
 
-    private void wireWidgets() {
-        recyclerView = findViewById(R.id.recyclerView_homeFragment_grid);
+    private void wireWidgets(View rootView) {
+        recyclerView = getActivity().findViewById(R.id.recyclerView_homeFragment_grid);
     }
 
     private void setListeners() {

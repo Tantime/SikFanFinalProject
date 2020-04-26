@@ -17,39 +17,19 @@ import java.util.List;
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
     private List<Recipe> recipeList;
+    private LayoutInflater mInflater;
     private ItemClickListener mItemClickListener;
 
-    public class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView textViewName;
-        ImageView imageViewImage;
-
-        RecipeViewHolder(ImageView imageView) {
-            super(imageView); // what about textView?
-            textViewName = textViewName.findViewById(R.id.textView_recipeItem_name);
-            imageViewImage = imageView.findViewById(R.id.imageView_recipeItem_image);
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            if (mItemClickListener != null) {
-                mItemClickListener.onItemClick(view, getAdapterPosition());
-            }
-        }
-    }
-
     public RecipeAdapter(Context context, List<Recipe> recipeList) {
+        this.mInflater = LayoutInflater.from(context);
         this.recipeList = recipeList;
     }
 
-    @NonNull
     @Override
-    public RecipeAdapter.RecipeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        TextView textView = (TextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recipe, parent, false);
-        ImageView imageView = (ImageView) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recipe, parent, false);
-
-//        RecipeViewHolder vh = new RecipeViewHolder();
-        return new RecipeViewHolder(imageView);
+    @NonNull
+    public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = mInflater.inflate(R.layout.item_recipe, parent, false);
+        return new RecipeViewHolder(view);
     }
 
     @Override
@@ -63,13 +43,32 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         return recipeList.size();
     }
 
+    public class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView textViewName;
+        ImageView imageViewImage;
+
+        RecipeViewHolder(View itemView) {
+            super(itemView); // what about textView?
+            textViewName = itemView.findViewById(R.id.textView_recipeItem_name);
+            imageViewImage = itemView.findViewById(R.id.imageView_recipeItem_image);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (mItemClickListener != null) {
+                mItemClickListener.onItemClick(view, getAdapterPosition());
+            }
+        }
+    }
+
     // convenience method for getting data at click position
-    String getItem(int id) {
+    public String getItem(int id) {
         return recipeList.get(id).getName();
     }
 
     // allows clicks events to be caught
-    void setClickListener(ItemClickListener itemClickListener) {
+    public void setClickListener(ItemClickListener itemClickListener) {
         this.mItemClickListener = itemClickListener;
     }
 
