@@ -105,8 +105,10 @@ public class HomeFragment extends Fragment implements RecipeAdapter.ItemClickLis
         recipe3.setImageURL("https://www.thespruceeats.com/thmb/uof94YPDmDqP0kAlbi_t04VR47E=/4000x3000/smart/filters:no_upscale()/chinese-pan-fried-dumplings-694499_hero-01-f8489a47cef14c06909edff8c6fa3fa9.jpg");
         recipe4.setName("sticky rice");
         recipe4.setImageURL("https://thewoksoflife.com/wp-content/uploads/2014/04/dim-sum-sticky-rice-2-1-500x375.jpg");
-        recipe5.setName("lotus cake");
+        recipe5.setName("taro cake");
+        recipe5.setImageURL("https://previews.123rf.com/images/kenishirotie/kenishirotie1806/kenishirotie180600076/103668763-chinese-style-homemade-pan-fry-yam-taro-cake.jpg");
         recipe6.setName("sponge cake");
+        recipe6.setImageURL("https://www.dimsumcentral.com/wp-content/uploads/2014/01/sponge-cake-header-new.jpg");
         recipeList.add(recipe1);
         recipeList.add(recipe2);
         recipeList.add(recipe3);
@@ -115,7 +117,7 @@ public class HomeFragment extends Fragment implements RecipeAdapter.ItemClickLis
         recipeList.add(recipe6);
         Log.d(TAG, "onCreate: " + recipeList.toString());
 
-        recyclerView.setHasFixedSize(true);
+//        recyclerView.setHasFixedSize(true);
         int numberOfColumns = 2;
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), numberOfColumns));
         recipeAdapter = new RecipeAdapter(getActivity(), recipeList);
