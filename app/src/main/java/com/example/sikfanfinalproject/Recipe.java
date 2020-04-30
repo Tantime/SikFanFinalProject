@@ -49,17 +49,33 @@ public class Recipe implements Parcelable {
     }
 
     @Override
+    public String toString() {
+        return "Recipe{" +
+                "name='" + name + '\'' +
+                ", ingredients=" + ingredients +
+                ", steps=" + steps +
+                ", imageURL='" + imageURL + '\'' +
+                '}';
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
+        dest.writeString(this.name);
+        dest.writeParcelable(this.ingredients, flags);
+        dest.writeStringList(this.steps);
+        dest.writeString(this.imageURL);
     }
 
     protected Recipe(Parcel in) {
-
+        this.name = in.readString();
+        this.ingredients = in.readParcelable(Ingredients.class.getClassLoader());
+        this.steps = in.createStringArrayList();
+        this.imageURL = in.readString();
     }
 
     public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {

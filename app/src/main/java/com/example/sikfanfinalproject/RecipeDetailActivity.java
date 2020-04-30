@@ -2,10 +2,14 @@ package com.example.sikfanfinalproject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.sikfanfinalproject.ui.home.HomeFragment;
+import com.squareup.picasso.Picasso;
 
 public class RecipeDetailActivity extends AppCompatActivity {
 
@@ -14,21 +18,23 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private TextView textViewIngredients;
     private TextView textViewSteps;
 
+    private static final String TAG = "RecipeDetailActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         wireWidgets();
 
         Intent lastIntent = getIntent();
-        Recipe recipe = lastIntent.getParcelableExtra(RecipeListActivity.EXTRA_RECIPE);
+        Recipe recipe = lastIntent.getParcelableExtra(HomeFragment.EXTRA_RECIPE);
+        Log.d(TAG, "onCreate: " + recipe);
 
         textViewName.setText("" + recipe.getName());
-        int resourceImage = getResources().getIdentifier(recipe.getImageURL(), "drawable", getPackageName());
-        imageViewImage.setImageDrawable(getResources().getDrawable(resourceImage));
-        textViewIngredients.setText("" + recipe.getIngredients());
-        textViewSteps.setText("" + recipe.getSteps());
+        Picasso.get().load(recipe.getImageURL()).into(imageViewImage);
     }
 
     private void wireWidgets() {

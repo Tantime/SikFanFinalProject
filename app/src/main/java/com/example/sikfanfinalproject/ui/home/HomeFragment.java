@@ -44,6 +44,7 @@ package com.example.sikfanfinalproject.ui.home;
 //}
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -58,19 +59,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sikfanfinalproject.R;
 import com.example.sikfanfinalproject.Recipe;
 import com.example.sikfanfinalproject.RecipeAdapter;
-import com.example.sikfanfinalproject.RecipeListFragment;
+import com.example.sikfanfinalproject.RecipeDetailActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 public class HomeFragment extends Fragment implements RecipeAdapter.ItemClickListener {
 
     private RecyclerView recyclerView;
     private RecipeAdapter recipeAdapter;
-    private List<Recipe> recipeList = new ArrayList<Recipe>();
+    private ArrayList<Recipe> recipeList = new ArrayList<Recipe>();
     private Recipe recipe1 = new Recipe();
     private Recipe recipe2 = new Recipe();
     private Recipe recipe3 = new Recipe();
@@ -80,7 +80,7 @@ public class HomeFragment extends Fragment implements RecipeAdapter.ItemClickLis
 
     public static final String EXTRA_RECIPE = "recipe";
 
-    public static final String TAG = RecipeListFragment.class.getSimpleName();
+    public static final String TAG = HomeFragment.class.getSimpleName();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -91,8 +91,8 @@ public class HomeFragment extends Fragment implements RecipeAdapter.ItemClickLis
         wireWidgets(rootView);
         setListeners();
 
-        InputStream XmlFileInputStream = getResources().openRawResource(R.raw.recipes); // getting XML
-        String jsonString = readTextFile(XmlFileInputStream);
+//        InputStream XmlFileInputStream = getResources().openRawResource(R.raw.recipes); // getting XML
+//        String jsonString = readTextFile(XmlFileInputStream);
 
 //        Gson gson = new Gson();
 //        Recipe[] recipes = gson.fromJson(jsonString, Recipe[].class);
@@ -120,7 +120,7 @@ public class HomeFragment extends Fragment implements RecipeAdapter.ItemClickLis
 //        recyclerView.setHasFixedSize(true);
         int numberOfColumns = 2;
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), numberOfColumns));
-        recipeAdapter = new RecipeAdapter(getActivity(), recipeList);
+        recipeAdapter = new RecipeAdapter(getActivity(), recipeList, this);
         recipeAdapter.setClickListener(this);
         recyclerView.setAdapter(recipeAdapter);
 
@@ -128,8 +128,12 @@ public class HomeFragment extends Fragment implements RecipeAdapter.ItemClickLis
     }
 
     @Override
-    public void onItemClick(View view, int position) {
-        Log.i("TAG", "You clicked number " + recipeAdapter.getItem(position) + ", which is a cell position " + position);
+    public void onItemClick(int position) {
+        Log.i("TAG", "You clicked recipe " + recipeAdapter.getItem(position) + ", which is a cell position " + position);
+        Intent targetIntent = new Intent(getActivity(), RecipeDetailActivity.class);
+        targetIntent.putExtra(EXTRA_RECIPE, recipeList.get(position));
+        Log.d(TAG, "onItemClick: " + recipeList.get(position));
+        startActivity(targetIntent);
     }
 
     private void wireWidgets(View rootView) {
@@ -137,6 +141,15 @@ public class HomeFragment extends Fragment implements RecipeAdapter.ItemClickLis
     }
 
     private void setListeners() {
+//        recyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+//                Intent targetIntent = new Intent(getActivity(), RecipeDetailActivity.class);
+//                targetIntent.putExtra(EXTRA_RECIPE, recipeList.get(position));
+//                startActivity(targetIntent);
+//                getActivity().finish();
+//            }
+//        });
     }
 
     public String readTextFile(InputStream inputStream) {

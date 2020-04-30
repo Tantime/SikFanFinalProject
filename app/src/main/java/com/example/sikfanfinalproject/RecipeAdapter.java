@@ -12,24 +12,30 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
-    private List<Recipe> recipeList;
+    private ArrayList<Recipe> recipeList;
     private LayoutInflater mInflater;
     private ItemClickListener mItemClickListener;
+    //    private View.OnClickListener mOnClickListener;
+    private Context context;
 
-    public RecipeAdapter(Context context, List<Recipe> recipeList) {
+    private static final String EXTRA_RECIPE = "recipe";
+
+    public RecipeAdapter(Context context, ArrayList<Recipe> recipeList, ItemClickListener itemClickListener) {
         this.mInflater = LayoutInflater.from(context);
         this.recipeList = recipeList;
+        this.context = context;
+        this.mItemClickListener = itemClickListener;
     }
 
     @Override
     @NonNull
     public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.item_recipe, parent, false);
-        return new RecipeViewHolder(view);
+        return new RecipeViewHolder(view, mItemClickListener);
     }
 
     @Override
@@ -46,18 +52,21 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     public class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView textViewName;
         ImageView imageViewImage;
+        ItemClickListener itemClickListener;
 
-        RecipeViewHolder(View itemView) {
-            super(itemView); // what about textView?
+        RecipeViewHolder(View itemView, ItemClickListener itemClickListener) {
+            super(itemView);
+            context = itemView.getContext();
             textViewName = itemView.findViewById(R.id.textView_recipeItem_name);
             imageViewImage = itemView.findViewById(R.id.imageView_recipeItem_image);
+            this.itemClickListener = itemClickListener;
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             if (mItemClickListener != null) {
-                mItemClickListener.onItemClick(view, getAdapterPosition());
+                mItemClickListener.onItemClick(getAdapterPosition());
             }
         }
     }
@@ -74,7 +83,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
-        void onItemClick(View view, int position);
+        void onItemClick(int position);
     }
 //
 //    @Override

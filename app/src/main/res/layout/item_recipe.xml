@@ -8,20 +8,24 @@
         android:id="@+id/imageView_recipeItem_image"
         android:layout_width="174dp"
         android:layout_height="174dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:mipmap/sym_def_app_icon" />
+        app:srcCompat="@android:mipmap/sym_def_app_icon"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true" />
 
     <TextView
         android:id="@+id/textView_recipeItem_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:text="name of dish"
+        android:text="dish name"
         android:textAlignment="center"
-        android:textSize="18sp"
+        android:textSize="22sp"
+        android:fontFamily="sans-serif-light"
+        android:textAllCaps="true"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView_recipeItem_image" />
 </androidx.constraintlayout.widget.ConstraintLayout>
