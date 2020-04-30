@@ -19,15 +19,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     private ArrayList<Recipe> recipeList;
     private LayoutInflater mInflater;
     private ItemClickListener mItemClickListener;
-    //    private View.OnClickListener mOnClickListener;
-    private Context context;
 
     private static final String EXTRA_RECIPE = "recipe";
 
     public RecipeAdapter(Context context, ArrayList<Recipe> recipeList, ItemClickListener itemClickListener) {
         this.mInflater = LayoutInflater.from(context);
         this.recipeList = recipeList;
-        this.context = context;
         this.mItemClickListener = itemClickListener;
     }
 
@@ -56,7 +53,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
         RecipeViewHolder(View itemView, ItemClickListener itemClickListener) {
             super(itemView);
-            context = itemView.getContext();
             textViewName = itemView.findViewById(R.id.textView_recipeItem_name);
             imageViewImage = itemView.findViewById(R.id.imageView_recipeItem_image);
             this.itemClickListener = itemClickListener;
