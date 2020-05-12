@@ -33,8 +33,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
         Recipe recipe = lastIntent.getParcelableExtra(HomeFragment.EXTRA_RECIPE);
         Log.d(TAG, "onCreate: " + recipe);
 
-        textViewName.setText("" + recipe.getName());
-        Picasso.get().load(recipe.getImageURL()).into(imageViewImage);
+        textViewName.setText("" + recipe.getTitle());
+        Picasso.get().load(recipe.getImage()).into(imageViewImage);
     }
 
     private void wireWidgets() {

@@ -5,20 +5,20 @@ import android.os.Parcelable;
 
 public class Ingredients implements Parcelable {
 
-    private String quantity;
+    private String amount;
     private String name;
-    private String type;
+    private String original;
 
     public Ingredients() {
 
     }
 
-    public String getQuantity() {
-        return quantity;
+    public String getAmount() {
+        return amount;
     }
 
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
+    public void setAmount(String amount) {
+        this.amount = amount;
     }
 
     public String getName() {
@@ -29,12 +29,12 @@ public class Ingredients implements Parcelable {
         this.name = name;
     }
 
-    public String getType() {
-        return type;
+    public String getOriginal() {
+        return original;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setOriginal(String original) {
+        this.original = original;
     }
 
     @Override
@@ -44,15 +44,21 @@ public class Ingredients implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.amount);
+        dest.writeString(this.name);
+        dest.writeString(this.original);
     }
 
     protected Ingredients(Parcel in) {
+        this.amount = in.readString();
+        this.name = in.readString();
+        this.original = in.readString();
     }
 
     public static final Creator<Ingredients> CREATOR = new Creator<Ingredients>() {
         @Override
-        public Ingredients createFromParcel(Parcel in) {
-            return new Ingredients(in);
+        public Ingredients createFromParcel(Parcel source) {
+            return new Ingredients(source);
         }
 
         @Override
@@ -60,5 +66,4 @@ public class Ingredients implements Parcelable {
             return new Ingredients[size];
         }
     };
-
 }

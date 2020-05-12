@@ -3,58 +3,65 @@ package com.example.sikfanfinalproject;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
-
 public class Recipe implements Parcelable {
 
-    private String name;
-    private Ingredients ingredients;
-    private ArrayList<String> steps;
-    private String imageURL;
+    private String id;
+    private String title;
+    private Ingredients extendedIngredients;
+    private Steps steps;
+    private String image;
 
     public Recipe() {
 
     }
 
-    public String getName() {
-        return name;
+    public String getId() {
+        return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public Ingredients getIngredients() {
-        return ingredients;
+    public String getTitle() {
+        return title;
     }
 
-    public void setIngredients(Ingredients ingredients) {
-        this.ingredients = ingredients;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public ArrayList<String> getSteps() {
+    public Ingredients getExtendedIngredients() {
+        return extendedIngredients;
+    }
+
+    public void setExtendedIngredients(Ingredients extendedIngredients) {
+        this.extendedIngredients = extendedIngredients;
+    }
+
+    public Steps getSteps() {
         return steps;
     }
 
-    public void setSteps(ArrayList<String> steps) {
+    public void setSteps(Steps steps) {
         this.steps = steps;
     }
 
-    public String getImageURL() {
-        return imageURL;
+    public String getImage() {
+        return image;
     }
 
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     @Override
     public String toString() {
         return "Recipe{" +
-                "name='" + name + '\'' +
-                ", ingredients=" + ingredients +
+                "name='" + title + '\'' +
+                ", ingredients=" + extendedIngredients +
                 ", steps=" + steps +
-                ", imageURL='" + imageURL + '\'' +
+                ", imageURL='" + image + '\'' +
                 '}';
     }
 
@@ -65,17 +72,19 @@ public class Recipe implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.name);
-        dest.writeParcelable(this.ingredients, flags);
-        dest.writeStringList(this.steps);
-        dest.writeString(this.imageURL);
+        dest.writeString(this.id);
+        dest.writeString(this.title);
+        dest.writeParcelable(this.extendedIngredients, flags);
+        dest.writeParcelable(this.steps, flags);
+        dest.writeString(this.image);
     }
 
     protected Recipe(Parcel in) {
-        this.name = in.readString();
-        this.ingredients = in.readParcelable(Ingredients.class.getClassLoader());
-        this.steps = in.createStringArrayList();
-        this.imageURL = in.readString();
+        this.id = in.readString();
+        this.title = in.readString();
+        this.extendedIngredients = in.readParcelable(Ingredients.class.getClassLoader());
+        this.steps = in.readParcelable(Steps.class.getClassLoader());
+        this.image = in.readString();
     }
 
     public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {

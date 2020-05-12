@@ -46,10 +46,15 @@ package com.example.sikfanfinalproject.ui.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -60,14 +65,19 @@ import com.example.sikfanfinalproject.R;
 import com.example.sikfanfinalproject.Recipe;
 import com.example.sikfanfinalproject.RecipeAdapter;
 import com.example.sikfanfinalproject.RecipeDetailActivity;
+import com.example.sikfanfinalproject.RecipeService;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HomeFragment extends Fragment implements RecipeAdapter.ItemClickListener {
 
+    private EditText editTextSearch;
     private RecyclerView recyclerView;
     private RecipeAdapter recipeAdapter;
     private ArrayList<Recipe> recipeList = new ArrayList<Recipe>();
@@ -77,6 +87,8 @@ public class HomeFragment extends Fragment implements RecipeAdapter.ItemClickLis
     private Recipe recipe4 = new Recipe();
     private Recipe recipe5 = new Recipe();
     private Recipe recipe6 = new Recipe();
+
+    private String search = "";
 
     public static final String EXTRA_RECIPE = "recipe";
 
@@ -97,18 +109,18 @@ public class HomeFragment extends Fragment implements RecipeAdapter.ItemClickLis
 //        Gson gson = new Gson();
 //        Recipe[] recipes = gson.fromJson(jsonString, Recipe[].class);
 //        recipeList = Arrays.asList(recipes);
-        recipe1.setName("curry");
-        recipe1.setImageURL("https://www.jocooks.com/wp-content/uploads/2019/10/coconut-chicken-curry-1-10.jpg");
-        recipe2.setName("cup noodles");
-        recipe2.setImageURL("https://cdn.shopify.com/s/files/1/0414/0681/products/61PdRnr0QKL._SL1176_1400x.jpg?v=1571438812");
-        recipe3.setName("dumplings");
-        recipe3.setImageURL("https://www.thespruceeats.com/thmb/uof94YPDmDqP0kAlbi_t04VR47E=/4000x3000/smart/filters:no_upscale()/chinese-pan-fried-dumplings-694499_hero-01-f8489a47cef14c06909edff8c6fa3fa9.jpg");
-        recipe4.setName("sticky rice");
-        recipe4.setImageURL("https://thewoksoflife.com/wp-content/uploads/2014/04/dim-sum-sticky-rice-2-1-500x375.jpg");
-        recipe5.setName("taro cake");
-        recipe5.setImageURL("https://previews.123rf.com/images/kenishirotie/kenishirotie1806/kenishirotie180600076/103668763-chinese-style-homemade-pan-fry-yam-taro-cake.jpg");
-        recipe6.setName("sponge cake");
-        recipe6.setImageURL("https://www.dimsumcentral.com/wp-content/uploads/2014/01/sponge-cake-header-new.jpg");
+        recipe1.setTitle("curry");
+        recipe1.setImage("https://www.jocooks.com/wp-content/uploads/2019/10/coconut-chicken-curry-1-10.jpg");
+        recipe2.setTitle("cup noodles");
+        recipe2.setImage("https://cdn.shopify.com/s/files/1/0414/0681/products/61PdRnr0QKL._SL1176_1400x.jpg?v=1571438812");
+        recipe3.setTitle("dumplings");
+        recipe3.setImage("https://www.thespruceeats.com/thmb/uof94YPDmDqP0kAlbi_t04VR47E=/4000x3000/smart/filters:no_upscale()/chinese-pan-fried-dumplings-694499_hero-01-f8489a47cef14c06909edff8c6fa3fa9.jpg");
+        recipe4.setTitle("sticky rice");
+        recipe4.setImage("https://thewoksoflife.com/wp-content/uploads/2014/04/dim-sum-sticky-rice-2-1-500x375.jpg");
+        recipe5.setTitle("taro cake");
+        recipe5.setImage("https://previews.123rf.com/images/kenishirotie/kenishirotie1806/kenishirotie180600076/103668763-chinese-style-homemade-pan-fry-yam-taro-cake.jpg");
+        recipe6.setTitle("sponge cake");
+        recipe6.setImage("https://www.dimsumcentral.com/wp-content/uploads/2014/01/sponge-cake-header-new.jpg");
         recipeList.add(recipe1);
         recipeList.add(recipe2);
         recipeList.add(recipe3);
@@ -123,6 +135,25 @@ public class HomeFragment extends Fragment implements RecipeAdapter.ItemClickLis
         recipeAdapter = new RecipeAdapter(getActivity(), recipeList, this);
         recipeAdapter.setClickListener(this);
         recyclerView.setAdapter(recipeAdapter);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(RecipeService.BASE__URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        final RecipeService recipeService = retrofit.create(RecipeService.class);
+
+        editTextSearch.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    // search for the recipe with api call
+                    recipeSearch(recipeService);
+                    return true;
+                }
+                return false;
+            }
+        });
 
         return rootView;
     }
@@ -141,33 +172,69 @@ public class HomeFragment extends Fragment implements RecipeAdapter.ItemClickLis
     }
 
     private void setListeners() {
-//        recyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-//                Intent targetIntent = new Intent(getActivity(), RecipeDetailActivity.class);
-//                targetIntent.putExtra(EXTRA_RECIPE, recipeList.get(position));
-//                startActivity(targetIntent);
-//                getActivity().finish();
-//            }
-//        });
-    }
+        editTextSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-    public String readTextFile(InputStream inputStream) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-        byte buf[] = new byte[1024];
-        int len;
-        try {
-            while ((len = inputStream.read(buf)) != -1) {
-                outputStream.write(buf, 0, len);
             }
-            outputStream.close();
-            inputStream.close();
-        } catch (IOException e) {
 
-        }
-        return outputStream.toString();
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                search = editTextSearch.getText().toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
+
+    public void recipeSearch(RecipeService recipeService) {
+        if (editTextSearch.getText().toString().equals("")) {
+            // nothing
+        } else {
+            final Call<ArrayList<Recipe>> recipeCall = recipeService.getRecipes(editTextSearch.getText().toString());
+            recipeCall.enqueue(new Callback<ArrayList<Recipe>>() {
+                @Override
+                public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
+                    recipeList.clear();
+                    recipeAdapter.notifyItemRangeRemoved(0, recipeList.size());
+                    recipeList = response.body();
+//                    for (Recipe recipe : recipeList) {
+//                        String content = "Name: " + recipe.getTitle() + "\n" + "Ingredients: " +
+//                                recipe.getIngredients() + "\n" + "Steps: " + "\n" +
+//                                "imageURL: " + recipe.getImageURL() + "\n\n";
+//                    }
+                    if (recipeList != null) {
+                        recipeAdapter.notifyDataSetChanged();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ArrayList<Recipe>> call, Throwable t) {
+                    Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+//    public String readTextFile(InputStream inputStream) {
+//        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//
+//        byte buf[] = new byte[1024];
+//        int len;
+//        try {
+//            while ((len = inputStream.read(buf)) != -1) {
+//                outputStream.write(buf, 0, len);
+//            }
+//            outputStream.close();
+//            inputStream.close();
+//        } catch (IOException e) {
+//
+//        }
+//        return outputStream.toString();
+//    }
 
 }
 
