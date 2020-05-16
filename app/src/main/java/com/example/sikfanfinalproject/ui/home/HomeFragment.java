@@ -169,6 +169,7 @@ public class HomeFragment extends Fragment implements RecipeAdapter.ItemClickLis
 
     private void wireWidgets(View rootView) {
         recyclerView = rootView.findViewById(R.id.recyclerView_homeFragment_grid);
+        editTextSearch = rootView.findViewById(R.id.editText_homeFragment_search);
     }
 
     private void setListeners() {
@@ -191,10 +192,10 @@ public class HomeFragment extends Fragment implements RecipeAdapter.ItemClickLis
     }
 
     public void recipeSearch(RecipeService recipeService) {
-        if (editTextSearch.getText().toString().equals("")) {
+        if (search.equals("")) {
             // nothing
         } else {
-            final Call<ArrayList<Recipe>> recipeCall = recipeService.getRecipes(editTextSearch.getText().toString());
+            final Call<ArrayList<Recipe>> recipeCall = recipeService.getRecipes(search);
             recipeCall.enqueue(new Callback<ArrayList<Recipe>>() {
                 @Override
                 public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
