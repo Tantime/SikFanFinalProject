@@ -58,10 +58,11 @@ public class Recipe implements Parcelable {
     @Override
     public String toString() {
         return "Recipe{" +
-                "name='" + title + '\'' +
-                ", ingredients=" + extendedIngredients +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", extendedIngredients=" + extendedIngredients +
                 ", steps=" + steps +
-                ", imageURL='" + image + '\'' +
+                ", image='" + image + '\'' +
                 '}';
     }
 

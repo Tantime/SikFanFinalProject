@@ -65,6 +65,7 @@ import com.example.sikfanfinalproject.R;
 import com.example.sikfanfinalproject.Recipe;
 import com.example.sikfanfinalproject.RecipeAdapter;
 import com.example.sikfanfinalproject.RecipeDetailActivity;
+import com.example.sikfanfinalproject.RecipeList;
 import com.example.sikfanfinalproject.RecipeService;
 
 import java.util.ArrayList;
@@ -89,6 +90,7 @@ public class HomeFragment extends Fragment implements RecipeAdapter.ItemClickLis
     private Recipe recipe6 = new Recipe();
 
     private String search = "";
+    private String recipeId = "";
 
     public static final String EXTRA_RECIPE = "recipe";
 
@@ -191,29 +193,44 @@ public class HomeFragment extends Fragment implements RecipeAdapter.ItemClickLis
         });
     }
 
+    public void getRecipeImage(RecipeService recipeService) {
+        if (search.equals("")) {
+            // nothing
+        } else {
+            for (int i = 0; i < recipeList.size(); i++) {
+                recipeList.get(i).setImage("https://spoonacular.com/recipeImages/" + recipeList.get(i).getId() + "-480x360.jpg");
+            }
+            recipeAdapter.notifyDataSetChanged();
+        }
+    }
+
     public void recipeSearch(RecipeService recipeService) {
         if (search.equals("")) {
             // nothing
         } else {
-            final Call<ArrayList<Recipe>> recipeCall = recipeService.getRecipes(search);
-            recipeCall.enqueue(new Callback<ArrayList<Recipe>>() {
+            final Call<RecipeList> recipeCall = recipeService.getRecipeList(search);
+            recipeCall.enqueue(new Callback<RecipeList>() {
                 @Override
-                public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
+                public void onResponse(Call<RecipeList> call, Response<RecipeList> response) {
                     recipeList.clear();
                     recipeAdapter.notifyItemRangeRemoved(0, recipeList.size());
-                    recipeList = response.body();
+                    recipeList.addAll(response.body().getRecipes());
 //                    for (Recipe recipe : recipeList) {
 //                        String content = "Name: " + recipe.getTitle() + "\n" + "Ingredients: " +
 //                                recipe.getIngredients() + "\n" + "Steps: " + "\n" +
 //                                "imageURL: " + recipe.getImageURL() + "\n\n";
 //                    }
                     if (recipeList != null) {
+                        Log.d(TAG, "onResponse: recipeList is not null");
+                        Log.d(TAG, "onResponse: " + recipeList.get(1).toString());
                         recipeAdapter.notifyDataSetChanged();
+                        getRecipeImage(recipeService);
+                    } else {
+                        Log.d(TAG, "onResponse: recipeList is null");
                     }
                 }
-
                 @Override
-                public void onFailure(Call<ArrayList<Recipe>> call, Throwable t) {
+                public void onFailure(Call<RecipeList> call, Throwable t) {
                     Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });

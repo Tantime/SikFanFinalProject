@@ -1,6 +1,7 @@
 package com.example.sikfanfinalproject;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import static com.example.sikfanfinalproject.ui.home.HomeFragment.TAG;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
@@ -38,6 +41,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     @Override
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
         holder.textViewName.setText(recipeList.get(position).getTitle());
+        Log.d(TAG, "onBindViewHolder: " + recipeList.get(position).getImage());
         Picasso.get().load(recipeList.get(position).getImage()).into(holder.imageViewImage);
     }
 
