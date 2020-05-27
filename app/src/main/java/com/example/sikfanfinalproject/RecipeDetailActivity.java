@@ -35,6 +35,13 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
         textViewName.setText("" + recipe.getTitle());
         Picasso.get().load(recipe.getImage()).into(imageViewImage);
+//        textViewIngredients.setText("" + recipe.getExtendedIngredients().getOriginal());
+        int i = 1;
+        int k = 0;
+//        while (i == 1) {
+//            if (recipe.getSteps().getStep())
+//        }
+//        textViewSteps.setText("" + recipe.getSteps());
     }
 
     private void wireWidgets() {

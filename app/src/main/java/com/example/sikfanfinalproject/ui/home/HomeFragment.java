@@ -204,6 +204,19 @@ public class HomeFragment extends Fragment implements RecipeAdapter.ItemClickLis
         }
     }
 
+//    public void getRecipeInformation(RecipeService recipeService) {
+//        if (search.equals("")) {
+//            // nothing
+//        } else {
+//            final Call<Recipe> recipeCall = recipeService.getRecipeById(recipeId)
+//            for (int i = 0; i < recipeList.size(); i++) {
+//                recipeList.get(i).setImage("https://spoonacular.com/recipeImages/" + recipeList.get(i).getId() + "-480x360.jpg");
+//                recipeList.get(i).setExtendedIngredients();
+//            }
+//            recipeAdapter.notifyDataSetChanged();
+//        }
+//    }
+
     public void recipeSearch(RecipeService recipeService) {
         if (search.equals("")) {
             // nothing
@@ -225,6 +238,7 @@ public class HomeFragment extends Fragment implements RecipeAdapter.ItemClickLis
                         Log.d(TAG, "onResponse: " + recipeList.get(1).toString());
                         recipeAdapter.notifyDataSetChanged();
                         getRecipeImage(recipeService);
+//                        getRecipeInformation(recipeService);
                     } else {
                         Log.d(TAG, "onResponse: recipeList is null");
                     }

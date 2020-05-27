@@ -3,11 +3,13 @@ package com.example.sikfanfinalproject;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 public class Recipe implements Parcelable {
 
     private String id;
     private String title;
-    private Ingredients extendedIngredients;
+    private ArrayList<String> extendedIngredients;
     private Steps steps;
     private String image;
 

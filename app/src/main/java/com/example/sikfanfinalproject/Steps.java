@@ -12,6 +12,25 @@ public class Steps implements Parcelable {
 
     }
 
+    public String getStep() {
+        return step;
+    }
+
+    public void setStep(String step) {
+        this.step = step;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public static Creator<Steps> getCREATOR() {
+        return CREATOR;
+    }
 
     @Override
     public int describeContents() {
