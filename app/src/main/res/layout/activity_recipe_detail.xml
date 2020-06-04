@@ -8,12 +8,15 @@
         android:id="@+id/cardView_recipeDetail_frame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="50dp"
+        android:padding="30dp"
         app:cardCornerRadius="15dp"
         app:cardElevation="20dp"
         app:layout_constraintBottom_toTopOf="@id/textView_recipeDetail_ingredients"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <ImageView
             android:id="@+id/imageView_recipeDetail_image"
@@ -32,11 +35,14 @@
 
     <TextView
         android:id="@+id/textView_recipeDetail_name"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="40dp"
+        android:layout_margin="40dp"
         android:fontFamily="sans-serif-light"
+        android:padding="40dp"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textSize="36sp"
         app:layout_constraintBottom_toTopOf="@id/cardView_recipeDetail_frame"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -47,12 +53,11 @@
         android:id="@+id/textView_recipeDetail_ingredients"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="20sp"
         android:fontFamily="sans-serif-light"
+        android:text="Ingredients"
+        android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/textView_recipeDetail_steps"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cardView_recipeDetail_frame" />
 
@@ -60,9 +65,9 @@
         android:id="@+id/textView_recipeDetail_steps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="20sp"
         android:fontFamily="sans-serif-light"
+        android:text="Steps"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

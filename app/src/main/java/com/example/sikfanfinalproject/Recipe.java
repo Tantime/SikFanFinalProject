@@ -9,7 +9,7 @@ public class Recipe implements Parcelable {
 
     private String id;
     private String title;
-    private ArrayList<String> extendedIngredients;
+    private ArrayList<Ingredients> extendedIngredients;
     private Steps steps;
     private String image;
 
@@ -33,11 +33,11 @@ public class Recipe implements Parcelable {
         this.title = title;
     }
 
-    public Ingredients getExtendedIngredients() {
+    public ArrayList<Ingredients> getExtendedIngredients() {
         return extendedIngredients;
     }
 
-    public void setExtendedIngredients(Ingredients extendedIngredients) {
+    public void setExtendedIngredients(ArrayList<Ingredients> extendedIngredients) {
         this.extendedIngredients = extendedIngredients;
     }
 
@@ -77,7 +77,7 @@ public class Recipe implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.id);
         dest.writeString(this.title);
-        dest.writeParcelable(this.extendedIngredients, flags);
+        dest.writeTypedList(this.extendedIngredients);
         dest.writeParcelable(this.steps, flags);
         dest.writeString(this.image);
     }
@@ -85,7 +85,7 @@ public class Recipe implements Parcelable {
     protected Recipe(Parcel in) {
         this.id = in.readString();
         this.title = in.readString();
-        this.extendedIngredients = in.readParcelable(Ingredients.class.getClassLoader());
+        this.extendedIngredients = in.createTypedArrayList(Ingredients.CREATOR);
         this.steps = in.readParcelable(Steps.class.getClassLoader());
         this.image = in.readString();
     }
